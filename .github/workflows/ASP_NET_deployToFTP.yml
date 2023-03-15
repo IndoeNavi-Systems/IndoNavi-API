@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Publish
-      run: dotnet publish --framework net6.0 --runtime "Portable" -c Release
+      run: dotnet publish --framework net6.0 --runtime "linux-x64" -c Release
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
@@ -30,4 +30,4 @@ jobs:
         password: ${{ secrets.FTP_SERVER_PASSWORD }}
         port: 69
         server-dir: ./webapi-test/
-        local-dir: ./IndoeNaviAPI/obj/Release/net6.0/Portable/
+        local-dir: ./IndoeNaviAPI/obj/Release/net6.0/linux-x64/

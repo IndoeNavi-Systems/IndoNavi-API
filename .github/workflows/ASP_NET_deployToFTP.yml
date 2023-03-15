@@ -1,0 +1,29 @@
+on: 
+  push:
+    branches:
+      - master
+name: 🚀 Deploy IndøNavi API with FTP
+jobs:
+  api-deploy:
+    name: 🎉 API deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Publish
+      run: dotnet publish --framework net6.0 --runtime "linux-x64" -c Release
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ftp_usr
+        password: ${{ secrets.FTP_SERVER_PASSWORD }}
+        port: 69
+        server-dir: ./webapi-test/

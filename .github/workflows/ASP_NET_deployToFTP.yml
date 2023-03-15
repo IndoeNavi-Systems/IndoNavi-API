@@ -29,5 +29,5 @@ jobs:
         username: ftp_usr
         password: ${{ secrets.FTP_SERVER_PASSWORD }}
         port: 69
-        server-dir: ./webapi-test/
+        server-dir: ./webapi
         local-dir: ./src/IndoeNaviAPI/bin/Release/net6.0/linux-x64/publish/

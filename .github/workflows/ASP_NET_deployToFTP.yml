@@ -7,20 +7,20 @@ jobs:
   api-deploy:
     name: 🎉 API deploy
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./src
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
 
     - name: Setup dotnet
-      working-directory: ./src
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '6.0.x'
     - name: Install dependencies
-      working-directory: ./src
       run: dotnet restore
     - name: Publish
-      working-directory: ./src
       run: dotnet publish --framework net6.0 --runtime "linux-x64" -c Release
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4

@@ -22,7 +22,7 @@ public class MapController : ControllerBase
 					Name = "D15",
 				}
 },
-		ImageData = Convert.ToBase64String(System.IO.File.ReadAllBytes("Map.png")),
+		//ImageData = Convert.ToBase64String(System.IO.File.ReadAllBytes("Map.png")),
 		SPEs = new List<SPE>
 			{
 				new SPE

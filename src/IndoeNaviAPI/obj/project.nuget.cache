@@ -1,15 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "1KkZtbZl/GV+wsHirqcxtsAOfC8d0ta2Ov5D/wLuKxnlp1QdClt03XCSQqcJuOCPVYxXHCn3OI5SIKFLdPl1Vg==",
+  "dgSpecHash": "U9g0rfMGcNNFfp8JXMifMwVgqPa7O7no3J7cZ3DzpOukuKnghCIYhgepsvmY0580D7lT/TGwHzmmybh72zMKcQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\jonas.hansen\\source\\repos\\IndoeNavi-Systems\\IndoNavi-API\\src\\IndoeNaviAPI\\IndoeNaviAPI.csproj",
+  "projectFilePath": "C:\\Users\\Jonas\\Source\\Repos\\IndoeNavi-Systems\\IndoNavi-API\\src\\IndoeNaviAPI\\IndoeNaviAPI.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\jonas.hansen\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
-    "C:\\Users\\jonas.hansen\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
-    "C:\\Users\\jonas.hansen\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
-    "C:\\Users\\jonas.hansen\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
-    "C:\\Users\\jonas.hansen\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
-    "C:\\Users\\jonas.hansen\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512"
+    "C:\\Users\\Jonas\\.nuget\\packages\\microsoft.extensions.apidescription.server\\3.0.0\\microsoft.extensions.apidescription.server.3.0.0.nupkg.sha512",
+    "C:\\Users\\Jonas\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\Jonas\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
+    "C:\\Users\\Jonas\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
+    "C:\\Users\\Jonas\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
+    "C:\\Users\\Jonas\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
+    "C:\\Users\\Jonas\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.2.3\\swashbuckle.aspnetcore.swaggerui.6.2.3.nupkg.sha512",
+    "C:\\Users\\Jonas\\.nuget\\packages\\system.drawing.common\\7.0.0\\system.drawing.common.7.0.0.nupkg.sha512"
   ],
   "logs": []
 }

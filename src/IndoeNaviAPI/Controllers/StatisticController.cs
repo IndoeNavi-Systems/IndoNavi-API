@@ -7,16 +7,16 @@ namespace IndoeNaviAPI.Controllers;
 [Route("[controller]")]
 public class StatisticController : ControllerBase
 {
-	[HttpGet("path/sessions")]
+	[HttpGet("pathsessions")]
 	public List<DateValue> GetPathSessions(string area)
 	{
 		return new List<DateValue>()
 		{
-			new DateValue { DateOnly = new DateOnly(2023, 3, 17), Value = 11 },
-			new DateValue { DateOnly = new DateOnly(2023, 3, 16), Value = 35 },
-			new DateValue { DateOnly = new DateOnly(2023, 3, 15), Value = 23 },
-			new DateValue { DateOnly = new DateOnly(2023, 3, 14), Value = 13 },
-			new DateValue { DateOnly = new DateOnly(2023, 3, 13), Value = 25 },
+			new DateValue { Date = new DateOnly(2023, 3, 17).ToShortDateString(), Value = 11 },
+			new DateValue { Date = new DateOnly(2023, 3, 16).ToShortDateString(), Value = 35 },
+			new DateValue { Date = new DateOnly(2023, 3, 15).ToShortDateString(), Value = 23 },
+			new DateValue { Date = new DateOnly(2023, 3, 14).ToShortDateString(), Value = 13 },
+			new DateValue { Date = new DateOnly(2023, 3, 13).ToShortDateString(), Value = 25 },
 		};
 	}
 	[HttpPost("pathsessions")]
@@ -30,11 +30,11 @@ public class StatisticController : ControllerBase
 	{
 		return new List<DateValue>()
 		{
-			new DateValue { DateOnly = new DateOnly(2023, 3, 17), Value = 64 },
-			new DateValue { DateOnly = new DateOnly(2023, 3, 16), Value = 54 },
-			new DateValue { DateOnly = new DateOnly(2023, 3, 15), Value = 25 },
-			new DateValue { DateOnly = new DateOnly(2023, 3, 14), Value = 65 },
-			new DateValue { DateOnly = new DateOnly(2023, 3, 13), Value = 23 },
+			new DateValue { Date = new DateOnly(2023, 3, 17).ToShortDateString(), Value = 64 },
+			new DateValue { Date = new DateOnly(2023, 3, 16).ToShortDateString(), Value = 54 },
+			new DateValue { Date = new DateOnly(2023, 3, 15).ToShortDateString(), Value = 25 },
+			new DateValue { Date = new DateOnly(2023, 3, 14).ToShortDateString(), Value = 65 },
+			new DateValue { Date = new DateOnly(2023, 3, 13).ToShortDateString(), Value = 23 },
 		};
 	}
 	[HttpPost("activeusers")]

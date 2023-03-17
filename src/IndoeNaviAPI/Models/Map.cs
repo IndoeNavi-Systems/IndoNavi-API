@@ -2,7 +2,7 @@
 
 namespace IndoeNaviAPI.Models;
 
-public class Map
+public class Map : IHasIdProp
 {
 	public ObjectId Id { get; set; }
     public string Area { get; set; }

@@ -22,7 +22,7 @@ public class StatisticController : ControllerBase
 	[HttpPost("pathsessions")]
 	public IActionResult IncrementPathSession(string area)
 	{
-		return Ok($"Today's path session counter incremented with 1 {area}");
+		return Ok($"Today's path session counter incremented with 1 on {area}");
 	}
 
 	[HttpGet("activeusers")]
@@ -40,7 +40,7 @@ public class StatisticController : ControllerBase
 	[HttpPost("activeusers")]
 	public IActionResult IncrementActiveUsers(string area)
 	{
-		return Ok($"Today's active user counter incremented with 1 {area}");
+		return Ok($"Today's active user counter incremented with 1 on {area}");
 	}
 
 	[HttpGet("destinationvisits")]

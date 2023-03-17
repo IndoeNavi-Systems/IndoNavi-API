@@ -2,29 +2,29 @@
 
 namespace IndoeNaviAPI.Services;
 
-public class MapService
+public interface IMapService
 {
-    private IMongoDBService mongoDBService;
+	Task<Map?> GetMap(string area);
+	Task UpdateMap(Map map);
+}
+
+public class MapService : IMapService
+{
+    private readonly IMongoDBService mongoDBService;
 
 	public MapService(IMongoDBService mongoDBService)
 	{
 		this.mongoDBService = mongoDBService;
 	}
 
-	public async Task UpdateMap(string mapData, string area)
+	public async Task UpdateMap(Map map)
 	{
-		// Check if any map exists with the area name
-		Map map = await GetMap(area);
-		map.Area = area;
-		map.ImageData = mapData;
-
         await mongoDBService.Upsert<Map>( "maps", map.Id, map);
 	}
 
-	public async Task<Map> GetMap(string area)
+	public async Task<Map?> GetMap(string area)
 	{
 		List<Map> maps = await mongoDBService.GetAllByKey<Map, string>("maps", "area", area);
-		Map map = maps.Any() ? maps.First() : new();
-		return map;
+		return maps.SingleOrDefault();
 	}
 }

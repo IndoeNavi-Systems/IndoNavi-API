@@ -13,7 +13,6 @@ jobs:
     steps:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3
-
     - name: Setup dotnet
       uses: actions/setup-dotnet@v3
       with:
@@ -22,6 +21,12 @@ jobs:
       run: dotnet restore
     - name: Publish
       run: dotnet publish --framework net6.0 -r linux-x64 -c Release --no-self-contained true
+    - name: edit connection string
+      uses: benday-inc/edit-dbconnstr-in-appsettings@main
+      with:
+        pathtosettingsfile: ./src/IndoeNaviAPI/bin/Release/net6.0/linux-x64/publish/appsettings.json
+        name: "mongo_db"
+        connectionstring: ${{ secrets.CONNECTING_STRING }}
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:

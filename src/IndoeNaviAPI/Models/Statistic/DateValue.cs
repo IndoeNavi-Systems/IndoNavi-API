@@ -2,6 +2,6 @@
 
 public class DateValue
 {
-	public DateOnly DateOnly { get; set; }
+	public string Date { get; set; }
 	public int Value { get; set; }
 }

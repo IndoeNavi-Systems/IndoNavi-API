@@ -15,6 +15,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IMongoClient>(new MongoClient(builder.Configuration.GetConnectionString("mongo_db")));
 builder.Services.AddSingleton<IMongoDBService, MongoDBService>();
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
+{
+	builder.AllowAnyOrigin()
+		   .AllowAnyMethod()
+		   .AllowAnyHeader();
+}));
 
 var app = builder.Build();
 

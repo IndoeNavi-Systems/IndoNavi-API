@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using IndoeNaviAPI.Models;
+using MongoDB.Bson;
 
 namespace IndoeNaviAPI.Services
 {
@@ -7,6 +8,6 @@ namespace IndoeNaviAPI.Services
         Task<List<T>> GetAllByKey<T, TFieldValue>(string collectionName, string filterKey, TFieldValue filterKeyValue);
         Task<T> GetFirstByKey<T, TFieldValue>(string collectionName, string filterKey, TFieldValue filterKeyValue);
         Task Insert<T>(T type, string collectionName);
-        Task Update<T>(T type, string collectionName, ObjectId filterKeyValue);
+        Task Upsert<T>(string collectionName, ObjectId filterKeyValue, T type) where T : IHasIdProp;
     }
 }

@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using IndoeNaviAPI.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace IndoeNaviAPI.Services;
@@ -17,13 +18,18 @@ public class MongoDBService : IMongoDBService
         var collection = mongoDatabase.GetCollection<T>(collectionName);
         return collection.InsertOneAsync(type);
     }
-
-    public Task Update<T>(T type, string collectionName, ObjectId filterKeyValue)
+    public Task Upsert<T>(string collectionName, ObjectId filterKeyValue, T type) where T : IHasIdProp
     {
+        // Check if its a upsert or a update 
+        if (filterKeyValue == ObjectId.Empty)
+        {
+            // If its a upsert then genereate new id to Map object
+            filterKeyValue = ObjectId.GenerateNewId();
+            type.Id = filterKeyValue;
+        }
         var collection = mongoDatabase.GetCollection<T>(collectionName);
         var filter = Builders<T>.Filter.Eq("_id", filterKeyValue);
         return collection.ReplaceOneAsync(filter, type, new ReplaceOptions { IsUpsert = true });
-
     }
 
     public async Task<List<T>> GetAllByKey<T, TFieldValue>(string collectionName, string filterKey, TFieldValue filterKeyValue)

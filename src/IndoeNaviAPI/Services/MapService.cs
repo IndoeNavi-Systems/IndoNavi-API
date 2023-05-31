@@ -24,7 +24,7 @@ public class MapService : IMapService
 
 	public async Task<Map?> GetMap(string area)
 	{
-		List<Map> maps = await mongoDBService.GetAllByKey<Map, string>("maps", "area", area);
+		List<Map> maps = await mongoDBService.GetAllByKey<Map, string>("maps", "Area", area);
 		return maps.SingleOrDefault();
 	}
 }

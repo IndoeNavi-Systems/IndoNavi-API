@@ -12,6 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IMongoClient>(new MongoClient(builder.Configuration.GetConnectionString("mongo_db")));
 builder.Services.AddSingleton<IMongoDBService, MongoDBService>();
 builder.Services.AddSingleton<IMapService, MapService>();
+builder.Services.AddSingleton<IStatisticService, StatisticService>();
 builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 {
 	builder.AllowAnyOrigin()

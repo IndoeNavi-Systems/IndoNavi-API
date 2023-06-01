@@ -1,4 +1,6 @@
-﻿using IndoeNaviAPI.Models.Statistic;
+﻿using IndoeNaviAPI.Models;
+using IndoeNaviAPI.Models.Statistic;
+using IndoeNaviAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IndoeNaviAPI.Controllers;
@@ -7,40 +9,45 @@ namespace IndoeNaviAPI.Controllers;
 [Route("[controller]")]
 public class StatisticController : ControllerBase
 {
+	private readonly IStatisticService statisticService;
+
+    public StatisticController(IStatisticService statisticService)
+    {
+        this.statisticService = statisticService;
+    }
+
 	[HttpGet("pathsessions")]
-	public List<DateValue> GetPathSessions(string area)
+	public async Task<ActionResult<List<PathSession>>> GetPathSessions()
 	{
-		return new List<DateValue>()
+		List<PathSession> pathSessions = await statisticService.GetPathSessions();
+        if (pathSessions.Count <= 0)
 		{
-			new DateValue { Date = new DateOnly(2023, 3, 17).ToShortDateString(), Value = 11 },
-			new DateValue { Date = new DateOnly(2023, 3, 16).ToShortDateString(), Value = 35 },
-			new DateValue { Date = new DateOnly(2023, 3, 15).ToShortDateString(), Value = 23 },
-			new DateValue { Date = new DateOnly(2023, 3, 14).ToShortDateString(), Value = 13 },
-			new DateValue { Date = new DateOnly(2023, 3, 13).ToShortDateString(), Value = 25 },
-		};
+            return NotFound($"No pathSessions exists");
 	}
+        return pathSessions;
+    }
 	[HttpPost("pathsessions")]
-	public IActionResult IncrementPathSession(string area)
+	public async Task<IActionResult> IncrementPathSession()
 	{
-		return Ok($"Today's path session counter incremented with 1 on {area}");
+		await statisticService.IncrementPathSessionToday();
+		return Ok($"Today's path session counter incremented with 1");
 	}
 
 	[HttpGet("activeusers")]
-	public List<DateValue> GetActiveUsers(string area)
+	public async Task<ActionResult<List<ActiveUsers>>> GetActiveUsers()
 	{
-		return new List<DateValue>()
+        List<ActiveUsers> activeUsers = await statisticService.GetActiveUsers();
+        if (activeUsers.Count <= 0)
 		{
-			new DateValue { Date = new DateOnly(2023, 3, 17).ToShortDateString(), Value = 64 },
-			new DateValue { Date = new DateOnly(2023, 3, 16).ToShortDateString(), Value = 54 },
-			new DateValue { Date = new DateOnly(2023, 3, 15).ToShortDateString(), Value = 25 },
-			new DateValue { Date = new DateOnly(2023, 3, 14).ToShortDateString(), Value = 65 },
-			new DateValue { Date = new DateOnly(2023, 3, 13).ToShortDateString(), Value = 23 },
-		};
+            return NotFound($"No activeUsers exists");
+        }
+        return activeUsers;
 	}
 	[HttpPost("activeusers")]
-	public IActionResult IncrementActiveUsers(string area)
+	public async Task<IActionResult> IncrementActiveUsers()
 	{
-		return Ok($"Today's active user counter incremented with 1 on {area}");
+        await statisticService.IncrementActiveUsersToday();
+        return Ok($"Today's active user counter incremented with 1");
 	}
 
 	[HttpGet("destinationvisits")]

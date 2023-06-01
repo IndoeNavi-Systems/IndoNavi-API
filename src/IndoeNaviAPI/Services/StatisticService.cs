@@ -12,7 +12,7 @@ public interface IStatisticService
     Task<List<ActiveUser>> GetActiveUsers();
     Task IncrementActiveUsersToday();
     Task<List<DestinationVisit>> GetDestinationVisits();
-    Task IncrementDestinationVisits(string destination);
+    Task IncrementDestinationVisits(string destination);    
 
     Task<List<UsedSensor>> GetUsedSensors();
     Task IncrementUsedSensors(string sensorName);
@@ -35,20 +35,20 @@ public class StatisticService : IStatisticService
 
     public async Task IncrementPathSessionToday()
     {
+        string collectionName = "pathSessions";
         // Find path session for today
-        PathSession pathsession = await mongoDBService.GetFirstByKey<PathSession, DateTimeOffset>("pathSessions", "Date", DateTimeOffset.Now.Date);
+        PathSession pathsession = await mongoDBService.GetFirstByKey<PathSession, DateTimeOffset>(collectionName, "Date", DateTimeOffset.Now.Date);
         // If not exist then create one
         if (pathsession == null)
         {
             pathsession = new PathSession { Id= ObjectId.Empty, Date = DateTimeOffset.Now.Date, Count = 1 };
-            await mongoDBService.Insert(pathsession, "pathSessions");
+            await mongoDBService.Insert(pathsession, collectionName);
             return;
         }
 
 
         // Increment the counter field
-        await mongoDBService.Update<PathSession>("pathSessions", pathsession.Id,
-            Builders<PathSession>.Update.Inc(a => a.Count, 1), pathsession);
+        await mongoDBService.Update_IncrementField<PathSession>(collectionName, pathsession.Id, "Count", 1, pathsession);
         return;
     }
 
@@ -60,21 +60,21 @@ public class StatisticService : IStatisticService
 
     public async Task IncrementActiveUsersToday()
     {
+        string collectionName = "activeUsers";
         // Find Active users for today
-        ActiveUser activeUser = await mongoDBService.GetFirstByKey<ActiveUser, DateTimeOffset>("activeUsers", "Date", DateTimeOffset.Now.Date);
+        ActiveUser activeUser = await mongoDBService.GetFirstByKey<ActiveUser, DateTimeOffset>(collectionName, "Date", DateTimeOffset.Now.Date);
 
         // If not exist then create one
         if (activeUser == null)
         {
             activeUser = new ActiveUser { Id = ObjectId.Empty, Date = DateTimeOffset.Now.Date, Count = 1 };
-            await mongoDBService.Insert(activeUser, "activeUsers");
+            await mongoDBService.Insert(activeUser, collectionName);
             return;
         }
 
 
         // Increment the counter field
-        await mongoDBService.Update<ActiveUser>("activeUsers", activeUser.Id,
-            Builders<ActiveUser>.Update.Inc(a => a.Count, 1), activeUser);
+        await mongoDBService.Update_IncrementField<ActiveUser>(collectionName, activeUser.Id, "Count", 1, activeUser);
         return;
     }
 
@@ -86,21 +86,21 @@ public class StatisticService : IStatisticService
 
     public async Task IncrementDestinationVisits(string destination)
     {
+        string collectionName = "destinationVisit";
         // Find Active users for today
-        DestinationVisit destinationVisit = await mongoDBService.GetFirstByKey<DestinationVisit, string>("destinationVisit", "Destination", destination);
+        DestinationVisit destinationVisit = await mongoDBService.GetFirstByKey<DestinationVisit, string>(collectionName, "Destination", destination);
 
         // If not exist then create one
         if (destinationVisit == null)
         {
             destinationVisit = new DestinationVisit { Id = ObjectId.Empty, Destination = destination, Count = 1 };
-            await mongoDBService.Insert(destinationVisit, "destinationVisit");
+            await mongoDBService.Insert(destinationVisit, collectionName);
             return;
         }
 
 
         // Increment the counter field
-        await mongoDBService.Update<DestinationVisit>("destinationVisit", destinationVisit.Id,
-            Builders<DestinationVisit>.Update.Inc(a => a.Count, 1), destinationVisit);
+        await mongoDBService.Update_IncrementField<DestinationVisit>(collectionName, destinationVisit.Id, "Count", 1, destinationVisit);
         return;
     }
 
@@ -112,21 +112,21 @@ public class StatisticService : IStatisticService
 
     public async Task IncrementUsedSensors(string sensorName)
     {
+        string collectionName = "usedSensors";
         // Find Active users for today
-        UsedSensor usedSensor = await mongoDBService.GetFirstByKey<UsedSensor, string>("usedSensors", "SensorName", sensorName);
+        UsedSensor usedSensor = await mongoDBService.GetFirstByKey<UsedSensor, string>(collectionName, "SensorName", sensorName);
 
         // If not exist then create one
         if (usedSensor == null)
         {
             usedSensor = new UsedSensor { Id = ObjectId.Empty, SensorName = sensorName, Count = 1 };
-            await mongoDBService.Insert(usedSensor, "usedSensors");
+            await mongoDBService.Insert(usedSensor, collectionName);
             return;
         }
 
 
         // Increment the counter field
-        await mongoDBService.Update<UsedSensor>("usedSensors", usedSensor.Id,
-            Builders<UsedSensor>.Update.Inc(a => a.Count, 1), usedSensor);
+        await mongoDBService.Update_IncrementField<UsedSensor>(collectionName, usedSensor.Id, "Count", 1, usedSensor);
         return;
     }
 }

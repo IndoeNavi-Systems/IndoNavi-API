@@ -1,4 +1,6 @@
-﻿using IndoeNaviAPI.Models.Statistic;
+﻿using IndoeNaviAPI.Models;
+using IndoeNaviAPI.Models.Statistic;
+using IndoeNaviAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IndoeNaviAPI.Controllers;
@@ -7,55 +9,78 @@ namespace IndoeNaviAPI.Controllers;
 [Route("[controller]")]
 public class StatisticController : ControllerBase
 {
-	[HttpGet("pathsessions")]
-	public List<DateValue> GetPathSessions(string area)
+	private readonly IStatisticService statisticService;
+
+    public StatisticController(IStatisticService statisticService)
+    {
+        this.statisticService = statisticService;
+    }
+
+    [HttpGet("pathsessions")]
+	public async Task<ActionResult<List<PathSession>>> GetPathSessions()
 	{
-		return new List<DateValue>()
-		{
-			new DateValue { Date = new DateOnly(2023, 3, 17).ToShortDateString(), Value = 11 },
-			new DateValue { Date = new DateOnly(2023, 3, 16).ToShortDateString(), Value = 35 },
-			new DateValue { Date = new DateOnly(2023, 3, 15).ToShortDateString(), Value = 23 },
-			new DateValue { Date = new DateOnly(2023, 3, 14).ToShortDateString(), Value = 13 },
-			new DateValue { Date = new DateOnly(2023, 3, 13).ToShortDateString(), Value = 25 },
-		};
-	}
+		List<PathSession> pathSessions = await statisticService.GetPathSessions();
+        if (pathSessions.Count <= 0)
+        {
+            return NotFound($"No pathSessions exists");
+        }
+        return pathSessions;
+    }
 	[HttpPost("pathsessions")]
-	public IActionResult IncrementPathSession(string area)
+	public async Task<IActionResult> IncrementPathSession()
 	{
-		return Ok($"Today's path session counter incremented with 1 on {area}");
+		await statisticService.IncrementPathSessionToday();
+		return Ok($"Today's path session counter incremented with 1");
 	}
 
 	[HttpGet("activeusers")]
-	public List<DateValue> GetActiveUsers(string area)
+	public async Task<ActionResult<List<ActiveUser>>> GetActiveUsers()
 	{
-		return new List<DateValue>()
-		{
-			new DateValue { Date = new DateOnly(2023, 3, 17).ToShortDateString(), Value = 64 },
-			new DateValue { Date = new DateOnly(2023, 3, 16).ToShortDateString(), Value = 54 },
-			new DateValue { Date = new DateOnly(2023, 3, 15).ToShortDateString(), Value = 25 },
-			new DateValue { Date = new DateOnly(2023, 3, 14).ToShortDateString(), Value = 65 },
-			new DateValue { Date = new DateOnly(2023, 3, 13).ToShortDateString(), Value = 23 },
-		};
-	}
+        List<ActiveUser> activeUsers = await statisticService.GetActiveUsers();
+        if (activeUsers.Count <= 0)
+        {
+            return NotFound($"No activeUsers exists");
+        }
+        return activeUsers;
+    }
 	[HttpPost("activeusers")]
-	public IActionResult IncrementActiveUsers(string area)
+	public async Task<IActionResult> IncrementActiveUsers()
 	{
-		return Ok($"Today's active user counter incremented with 1 on {area}");
+        await statisticService.IncrementActiveUsersToday();
+        return Ok($"Today's active user counter incremented with 1");
 	}
 
 	[HttpGet("destinationvisits")]
-	public List<DestinationVisit> GetDestinationVisits(string area)
+	public async Task<ActionResult<List<DestinationVisit>>> GetDestinationVisits()
 	{
-		return new List<DestinationVisit>()
-		{
-			new DestinationVisit { Destination = "D30", VisitAmount = 43 },
-			new DestinationVisit { Destination = "D31", VisitAmount = 23 },
-			new DestinationVisit { Destination = "D32", VisitAmount = 64 },
-		};
-	}
+        List<DestinationVisit> destinationVisits = await statisticService.GetDestinationVisits();
+        if (destinationVisits.Count <= 0)
+        {
+            return NotFound($"No destination Visits exists");
+        }
+        return destinationVisits;
+    }
 	[HttpPost("destinationvisits")]
-	public IActionResult IncrementDestinationVisit(string area, string destination)
+	public async Task<IActionResult> IncrementDestinationVisit(string destination)
 	{
-		return Ok($"Destination visit {destination} incremented with 1 on {area}");
+        await statisticService.IncrementDestinationVisits(destination);
+        return Ok($"Destination visit {destination} incremented with 1");
 	}
+
+    [HttpGet("usedsensor")]
+    public async Task<ActionResult<List<UsedSensor>>> GetUsedSensors()
+    {
+        List<UsedSensor> usedSensors = await statisticService.GetUsedSensors();
+        if (usedSensors.Count <= 0)
+        {
+            return NotFound($"No used sensors exists");
+        }
+        return usedSensors;
+    }
+    [HttpPost("usedsensor")]
+    public async Task<IActionResult> IncrementUsedSensor(string sensorName)
+    {
+        await statisticService.IncrementUsedSensors(sensorName);
+        return Ok($"Sensor {sensorName} incremented used with 1");
+    }
 }

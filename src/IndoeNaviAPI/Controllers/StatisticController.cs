@@ -16,14 +16,14 @@ public class StatisticController : ControllerBase
         this.statisticService = statisticService;
     }
 
-	[HttpGet("pathsessions")]
+    [HttpGet("pathsessions")]
 	public async Task<ActionResult<List<PathSession>>> GetPathSessions()
 	{
 		List<PathSession> pathSessions = await statisticService.GetPathSessions();
         if (pathSessions.Count <= 0)
-		{
+        {
             return NotFound($"No pathSessions exists");
-	}
+        }
         return pathSessions;
     }
 	[HttpPost("pathsessions")]
@@ -34,15 +34,15 @@ public class StatisticController : ControllerBase
 	}
 
 	[HttpGet("activeusers")]
-	public async Task<ActionResult<List<ActiveUsers>>> GetActiveUsers()
+	public async Task<ActionResult<List<ActiveUser>>> GetActiveUsers()
 	{
-        List<ActiveUsers> activeUsers = await statisticService.GetActiveUsers();
+        List<ActiveUser> activeUsers = await statisticService.GetActiveUsers();
         if (activeUsers.Count <= 0)
-		{
+        {
             return NotFound($"No activeUsers exists");
         }
         return activeUsers;
-	}
+    }
 	[HttpPost("activeusers")]
 	public async Task<IActionResult> IncrementActiveUsers()
 	{
@@ -51,18 +51,36 @@ public class StatisticController : ControllerBase
 	}
 
 	[HttpGet("destinationvisits")]
-	public List<DestinationVisit> GetDestinationVisits(string area)
+	public async Task<ActionResult<List<DestinationVisit>>> GetDestinationVisits()
 	{
-		return new List<DestinationVisit>()
-		{
-			new DestinationVisit { Destination = "D30", VisitAmount = 43 },
-			new DestinationVisit { Destination = "D31", VisitAmount = 23 },
-			new DestinationVisit { Destination = "D32", VisitAmount = 64 },
-		};
-	}
+        List<DestinationVisit> destinationVisits = await statisticService.GetDestinationVisits();
+        if (destinationVisits.Count <= 0)
+        {
+            return NotFound($"No destination Visits exists");
+        }
+        return destinationVisits;
+    }
 	[HttpPost("destinationvisits")]
-	public IActionResult IncrementDestinationVisit(string area, string destination)
+	public async Task<IActionResult> IncrementDestinationVisit(string destination)
 	{
-		return Ok($"Destination visit {destination} incremented with 1 on {area}");
+        await statisticService.IncrementDestinationVisits(destination);
+        return Ok($"Destination visit {destination} incremented with 1");
 	}
+
+    [HttpGet("usedsensor")]
+    public async Task<ActionResult<List<UsedSensor>>> GetUsedSensors()
+    {
+        List<UsedSensor> usedSensors = await statisticService.GetUsedSensors();
+        if (usedSensors.Count <= 0)
+        {
+            return NotFound($"No used sensors exists");
+        }
+        return usedSensors;
+    }
+    [HttpPost("usedsensor")]
+    public async Task<IActionResult> IncrementUsedSensor(string sensorName)
+    {
+        await statisticService.IncrementUsedSensors(sensorName);
+        return Ok($"Sensor {sensorName} incremented used with 1");
+    }
 }

@@ -53,6 +53,6 @@ public class MongoDBService : IMongoDBService
         var collection = mongoDatabase.GetCollection<T>(collectionName);
         var filter = Builders<T>.Filter.Eq(filterKey, filterKeyValue);
         var results = await collection.FindAsync(filter);
-        return results.First();
+        return results.FirstOrDefault();
     }
 }

@@ -10,8 +10,8 @@ public interface IMongoDBService
 	Task<T> GetFirstByKey<T, TFieldValue>(string collectionName, string filterKey, TFieldValue filterKeyValue);
 	Task Insert<T>(T type, string collectionName);
 	Task Upsert<T>(string collectionName, ObjectId filterKeyValue, T type) where T : IHasIdProp;
-    Task Update<T>(string collectionName, ObjectId filterKeyValue, UpdateDefinition<T> updateDef, T type) where T : IHasIdProp;
     Task<List<T>> GetAll<T>(string collectionName);
+    Task Update_IncrementField<T>(string collectionName, ObjectId filterKeyValue, string fieldName, int incrementValue, T type) where T : IHasIdProp;
 
 }
 
@@ -59,7 +59,7 @@ public class MongoDBService : IMongoDBService
         return results.FirstOrDefault();
     }
 
-    public Task Update<T>(string collectionName, ObjectId filterKeyValue, UpdateDefinition<T> updateDef, T type) where T : IHasIdProp
+    public Task Update_IncrementField<T>(string collectionName, ObjectId filterKeyValue, string fieldName, int incrementValue, T type) where T : IHasIdProp
     {
         // Check if its a upsert or a update 
         if (filterKeyValue == ObjectId.Empty)
@@ -68,9 +68,10 @@ public class MongoDBService : IMongoDBService
             filterKeyValue = ObjectId.GenerateNewId();
             type.Id = filterKeyValue;
         }
-        
+
         var collection = mongoDatabase.GetCollection<T>(collectionName);
         var filter = Builders<T>.Filter.Eq("_id", filterKeyValue);
+        var updateDef = Builders<T>.Update.Inc(fieldName, incrementValue);
         return collection.UpdateOneAsync(filter, updateDef);
     }
     public async Task<List<T>> GetAll<T>(string collectionName)

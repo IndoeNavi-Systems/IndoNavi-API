@@ -29,7 +29,7 @@ public class StatisticController : ControllerBase
 	[HttpPost("pathsessions")]
 	public async Task<IActionResult> IncrementPathSession()
 	{
-		await statisticService.IncrementPathSessionToday();
+        await statisticService.IncrementPathSessionToday();
 		return Ok($"Today's path session counter incremented with 1");
 	}
 

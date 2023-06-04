@@ -10,7 +10,7 @@ public interface IMapService
 
 public class MapService : IMapService
 {
-	private readonly IMongoDBService mongoDBService;
+    private readonly IMongoDBService mongoDBService;
 
 	public MapService(IMongoDBService mongoDBService)
 	{
@@ -21,7 +21,7 @@ public class MapService : IMapService
 	{
 		Map mapFromDb = await mongoDBService.GetFirstByKey<Map, string>("maps", "Area", map.Area);
 		map.Id = mapFromDb.Id;
-		await mongoDBService.Upsert<Map>("maps", mapFromDb.Id, map);
+		await mongoDBService.Upsert<Map>( "maps", mapFromDb.Id, map);
 	}
 
 	public async Task<Map?> GetMap(string area)

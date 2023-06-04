@@ -19,12 +19,13 @@ public class MapService : IMapService
 
 	public async Task UpdateMap(Map map)
 	{
-        await mongoDBService.Upsert<Map>( "maps", map.Id, map);
+		Map mapFromDb = await mongoDBService.GetFirstByKey<Map, string>("maps", "Area", map.Area);
+		map.Id = mapFromDb.Id;
+		await mongoDBService.Upsert<Map>( "maps", mapFromDb.Id, map);
 	}
 
 	public async Task<Map?> GetMap(string area)
 	{
-		List<Map> maps = await mongoDBService.GetAllByKey<Map, string>("maps", "Area", area);
-		return maps.SingleOrDefault();
+		return (await mongoDBService.GetAllByKey<Map, string>("maps", "Area", area)).SingleOrDefault();
 	}
 }

@@ -7,5 +7,4 @@ public class RouteNode
 	public bool IsDestination { get; set; }
 	public List<RouteNode>? RouteNodes { get; set; }
 	public string Name { get; set; }
-	
 }

@@ -1,7 +1,5 @@
-﻿using IndoeNaviAPI.Models;
-using IndoeNaviAPI.Models.Statistic;
+﻿using IndoeNaviAPI.Models.Statistic;
 using MongoDB.Bson;
-using MongoDB.Driver;
 
 namespace IndoeNaviAPI.Services;
 
@@ -13,7 +11,6 @@ public interface IStatisticService
     Task IncrementActiveUsersToday();
     Task<List<DestinationVisit>> GetDestinationVisits();
     Task IncrementDestinationVisits(string destination);    
-
     Task<List<UsedSensor>> GetUsedSensors();
     Task IncrementUsedSensors(string sensorName);
 }
@@ -29,9 +26,8 @@ public class StatisticService : IStatisticService
 
     public async Task<List<PathSession>> GetPathSessions()
     {
-        List<PathSession> pathSessions = await mongoDBService.GetAll<PathSession>("pathSessions");
-        return pathSessions;
-    }
+        return await mongoDBService.GetAll<PathSession>("pathSessions");
+	}
 
     public async Task IncrementPathSessionToday()
     {
@@ -46,17 +42,14 @@ public class StatisticService : IStatisticService
             return;
         }
 
-
         // Increment the counter field
         await mongoDBService.Update_IncrementField<PathSession>(collectionName, pathsession.Id, "Count", 1, pathsession);
-        return;
     }
 
     public async Task<List<ActiveUser>> GetActiveUsers()
     {
-        List<ActiveUser> activeUsers = await mongoDBService.GetAll<ActiveUser>("activeUsers");
-        return activeUsers;
-    }
+        return await mongoDBService.GetAll<ActiveUser>("activeUsers");
+	}
 
     public async Task IncrementActiveUsersToday()
     {
@@ -72,17 +65,14 @@ public class StatisticService : IStatisticService
             return;
         }
 
-
         // Increment the counter field
         await mongoDBService.Update_IncrementField<ActiveUser>(collectionName, activeUser.Id, "Count", 1, activeUser);
-        return;
     }
 
     public async Task<List<DestinationVisit>> GetDestinationVisits()
     {
-        List<DestinationVisit> destinationVisits = await mongoDBService.GetAll<DestinationVisit>("destinationVisit");
-        return destinationVisits;
-    }
+        return await mongoDBService.GetAll<DestinationVisit>("destinationVisit");
+	}
 
     public async Task IncrementDestinationVisits(string destination)
     {
@@ -98,16 +88,13 @@ public class StatisticService : IStatisticService
             return;
         }
 
-
         // Increment the counter field
         await mongoDBService.Update_IncrementField<DestinationVisit>(collectionName, destinationVisit.Id, "Count", 1, destinationVisit);
-        return;
     }
 
     public async Task<List<UsedSensor>> GetUsedSensors()
     {
-        List<UsedSensor> usedSensors = await mongoDBService.GetAll<UsedSensor>("usedSensors");
-        return usedSensors;
+        return await mongoDBService.GetAll<UsedSensor>("usedSensors");
     }
 
     public async Task IncrementUsedSensors(string sensorName)
@@ -124,9 +111,7 @@ public class StatisticService : IStatisticService
             return;
         }
 
-
         // Increment the counter field
         await mongoDBService.Update_IncrementField<UsedSensor>(collectionName, usedSensor.Id, "Count", 1, usedSensor);
-        return;
     }
 }

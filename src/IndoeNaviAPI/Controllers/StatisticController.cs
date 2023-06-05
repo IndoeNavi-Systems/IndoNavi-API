@@ -1,5 +1,4 @@
-﻿using IndoeNaviAPI.Models;
-using IndoeNaviAPI.Models.Statistic;
+﻿using IndoeNaviAPI.Models.Statistic;
 using IndoeNaviAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +19,7 @@ public class StatisticController : ControllerBase
 	public async Task<ActionResult<List<PathSession>>> GetPathSessions()
 	{
 		List<PathSession> pathSessions = await statisticService.GetPathSessions();
-        if (pathSessions.Count <= 0)
+		if (!pathSessions.Any())
         {
             return NotFound($"No pathSessions exists");
         }
@@ -37,7 +36,7 @@ public class StatisticController : ControllerBase
 	public async Task<ActionResult<List<ActiveUser>>> GetActiveUsers()
 	{
         List<ActiveUser> activeUsers = await statisticService.GetActiveUsers();
-        if (activeUsers.Count <= 0)
+        if (!activeUsers.Any())
         {
             return NotFound($"No activeUsers exists");
         }
@@ -54,7 +53,7 @@ public class StatisticController : ControllerBase
 	public async Task<ActionResult<List<DestinationVisit>>> GetDestinationVisits()
 	{
         List<DestinationVisit> destinationVisits = await statisticService.GetDestinationVisits();
-        if (destinationVisits.Count <= 0)
+        if (!destinationVisits.Any())
         {
             return NotFound($"No destination Visits exists");
         }
@@ -71,7 +70,7 @@ public class StatisticController : ControllerBase
     public async Task<ActionResult<List<UsedSensor>>> GetUsedSensors()
     {
         List<UsedSensor> usedSensors = await statisticService.GetUsedSensors();
-        if (usedSensors.Count <= 0)
+        if (!usedSensors.Any())
         {
             return NotFound($"No used sensors exists");
         }

@@ -21,7 +21,7 @@ public class MongoDBService : IMongoDBService
 
     public MongoDBService(IMongoClient mongoClient)
     {
-        this.mongoDatabase = mongoClient.GetDatabase("indoeNaviDB");
+        mongoDatabase = mongoClient.GetDatabase("indoeNaviDB");
     }
 
     public Task Insert<T>(T type, string collectionName)
@@ -74,6 +74,7 @@ public class MongoDBService : IMongoDBService
         var updateDef = Builders<T>.Update.Inc(fieldName, incrementValue);
         return collection.UpdateOneAsync(filter, updateDef);
     }
+
     public async Task<List<T>> GetAll<T>(string collectionName)
     {
         var collection = mongoDatabase.GetCollection<T>(collectionName);

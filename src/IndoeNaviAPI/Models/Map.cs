@@ -1,8 +1,10 @@
-﻿using MongoDB.Bson;
+﻿using IndoeNaviAPI.Utilities;
+using MongoDB.Bson;
 using System.Text.Json.Serialization;
 
 namespace IndoeNaviAPI.Models;
 
+[MongoCollection("maps")]
 public class Map : IHasIdProp
 {
 	public ObjectId Id { get; set; }

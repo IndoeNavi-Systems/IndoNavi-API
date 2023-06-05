@@ -1,7 +1,9 @@
-﻿using MongoDB.Bson;
+﻿using IndoeNaviAPI.Utilities;
+using MongoDB.Bson;
 
 namespace IndoeNaviAPI.Models.Statistic;
 
+[MongoCollection("activeUsers")]
 public class ActiveUser : IHasIdProp
 {
     public ObjectId Id { get; set; }

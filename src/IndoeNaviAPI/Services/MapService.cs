@@ -20,11 +20,11 @@ public class MapService : IMapService
 
 	public Task UpdateMap(Map map)
 	{
- 		return mongoDBService.Upsert<Map>( "maps", map.Id, map);
+ 		return mongoDBService.Upsert<Map>(map.Id, map);
 	}
 
 	public async Task<Map?> GetMap(string area)
 	{
-        return (await mongoDBService.GetAllByKey<Map, string>("maps", "Area", area)).SingleOrDefault();
+        return (await mongoDBService.GetAllByKey<Map, string>( "Area", area)).SingleOrDefault();
 	}
 }

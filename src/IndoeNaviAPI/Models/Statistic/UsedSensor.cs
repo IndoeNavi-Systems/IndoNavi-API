@@ -1,7 +1,9 @@
-﻿using MongoDB.Bson;
+﻿using IndoeNaviAPI.Utilities;
+using MongoDB.Bson;
 
 namespace IndoeNaviAPI.Models.Statistic;
 
+[MongoCollection("usedSensors")]
 public class UsedSensor : IHasIdProp
 {
     public ObjectId Id { get; set; }

@@ -1,18 +1,18 @@
-﻿using IndoeNaviAPI.Models.Statistic;
+﻿using IndoeNaviAPI.Models;
+using IndoeNaviAPI.Models.Statistic;
 using MongoDB.Bson;
 
 namespace IndoeNaviAPI.Services;
 
 public interface IStatisticService
 {
-	Task<List<PathSession>> GetPathSessions();
-	Task IncrementPathSessionToday();
-    Task<List<ActiveUser>> GetActiveUsers();
-    Task IncrementActiveUsersToday();
-    Task<List<DestinationVisit>> GetDestinationVisits();
-    Task IncrementDestinationVisits(string destination);    
-    Task<List<UsedSensor>> GetUsedSensors();
-    Task IncrementUsedSensors(string sensorName);
+	Task<List<T>> GetAllByArea<T>(string area);
+	Task IncrementPathSessionToday(string area);
+    Task IncrementActiveUsersToday(string area);
+    Task IncrementDestinationVisits(string destination, string area);    
+    Task IncrementUsedSensors(string sensorName, string area);
+    Task<bool> IsAreaExists(string area);
+
 }
 
 public class StatisticService : IStatisticService
@@ -24,94 +24,85 @@ public class StatisticService : IStatisticService
 		this.mongoDBService = mongoDBService;
 	}
 
-    public async Task<List<PathSession>> GetPathSessions()
+    public async Task<List<T>> GetAllByArea<T>(string area)
     {
-        return await mongoDBService.GetAll<PathSession>("pathSessions");
+        return await mongoDBService.GetAllByKey<T, string>("Area", area);
 	}
 
-    public async Task IncrementPathSessionToday()
+    public async Task IncrementPathSessionToday(string area)
     {
-        string collectionName = "pathSessions";
         // Find path session for today
-        PathSession pathsession = await mongoDBService.GetFirstByKey<PathSession, DateTimeOffset>(collectionName, "Date", DateTimeOffset.Now.Date);
+        PathSession pathsession = await mongoDBService.GetFirstByKey<PathSession, DateTimeOffset>("Date", DateTimeOffset.Now.Date);
         // If not exist then create one
         if (pathsession == null)
         {
-            pathsession = new PathSession { Date = DateTimeOffset.Now.Date, Count = 1 };
-            await mongoDBService.Insert(pathsession, collectionName);
+            pathsession = new PathSession {Date = DateTimeOffset.Now.Date, Count = 1, Area = area };
+            await mongoDBService.Insert(pathsession);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<PathSession>(collectionName, "Count", 1, pathsession);
+        await mongoDBService.Update_IncrementField<PathSession>("Count", 1, pathsession);
     }
 
-    public async Task<List<ActiveUser>> GetActiveUsers()
+    public async Task IncrementActiveUsersToday(string area)
     {
-        return await mongoDBService.GetAll<ActiveUser>("activeUsers");
-	}
-
-    public async Task IncrementActiveUsersToday()
-    {
-        string collectionName = "activeUsers";
         // Find Active users for today
-        ActiveUser activeUser = await mongoDBService.GetFirstByKey<ActiveUser, DateTimeOffset>(collectionName, "Date", DateTimeOffset.Now.Date);
+        ActiveUser activeUser = await mongoDBService.GetFirstByKey<ActiveUser, DateTimeOffset>("Date", DateTimeOffset.Now.Date);
 
         // If not exist then create one
         if (activeUser == null)
         {
-            activeUser = new ActiveUser { Date = DateTimeOffset.Now.Date, Count = 1 };
-            await mongoDBService.Insert(activeUser, collectionName);
+            activeUser = new ActiveUser { Date = DateTimeOffset.Now.Date, Count = 1, Area = area };
+            await mongoDBService.Insert(activeUser);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<ActiveUser>(collectionName, "Count", 1, activeUser);
+        await mongoDBService.Update_IncrementField<ActiveUser>("Count", 1, activeUser);
     }
 
-    public async Task<List<DestinationVisit>> GetDestinationVisits()
+    public async Task IncrementDestinationVisits(string destination, string area)
     {
-        return await mongoDBService.GetAll<DestinationVisit>("destinationVisit");
-	}
-
-    public async Task IncrementDestinationVisits(string destination)
-    {
-        string collectionName = "destinationVisit";
         // Find Active users for today
-        DestinationVisit destinationVisit = await mongoDBService.GetFirstByKey<DestinationVisit, string>(collectionName, "Destination", destination);
+        DestinationVisit destinationVisit = await mongoDBService.GetFirstByKey<DestinationVisit, string>("Destination", destination);
 
         // If not exist then create one
         if (destinationVisit == null)
         {
-            destinationVisit = new DestinationVisit { Destination = destination, Count = 1 };
-            await mongoDBService.Insert(destinationVisit, collectionName);
+            destinationVisit = new DestinationVisit { Destination = destination, Count = 1, Area = area };
+            await mongoDBService.Insert(destinationVisit);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<DestinationVisit>(collectionName, "Count", 1, destinationVisit);
+        await mongoDBService.Update_IncrementField<DestinationVisit>( "Count", 1, destinationVisit);
     }
 
-    public async Task<List<UsedSensor>> GetUsedSensors()
+    public async Task IncrementUsedSensors(string sensorName, string area)
     {
-        return await mongoDBService.GetAll<UsedSensor>("usedSensors");
-    }
-
-    public async Task IncrementUsedSensors(string sensorName)
-    {
-        string collectionName = "usedSensors";
         // Find Active users for today
-        UsedSensor usedSensor = await mongoDBService.GetFirstByKey<UsedSensor, string>(collectionName, "SensorName", sensorName);
+        UsedSensor usedSensor = await mongoDBService.GetFirstByKey<UsedSensor, string>("SensorName", sensorName);
 
         // If not exist then create one
         if (usedSensor == null)
         {
-            usedSensor = new UsedSensor { SensorName = sensorName, Count = 1 };
-            await mongoDBService.Insert(usedSensor, collectionName);
+            usedSensor = new UsedSensor { SensorName = sensorName, Count = 1, Area = area };
+            await mongoDBService.Insert(usedSensor);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<UsedSensor>(collectionName, "Count", 1, usedSensor);
+        await mongoDBService.Update_IncrementField<UsedSensor>( "Count", 1, usedSensor);
     }
+
+        /// <summary>
+    /// Check if area exits in map
+    /// </summary>
+    /// <param name="area"></param>
+    /// <returns></returns>
+    public async Task<bool> IsAreaExists(string area)
+    {
+        return (await mongoDBService.GetAllByKey<Map, string>("Area", area)).Count > 0;
+        }
 }

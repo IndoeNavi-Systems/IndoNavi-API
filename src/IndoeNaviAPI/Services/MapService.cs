@@ -20,7 +20,7 @@ public class MapService : IMapService
 
 	public Task UpdateMap(Map map)
 	{
- 		return mongoDBService.Upsert<Map>(map.Id, map);
+ 		return mongoDBService.Upsert<Map>(map);
 	}
 
 	public async Task<Map?> GetMap(string area)

@@ -9,11 +9,11 @@ public interface IMongoDBService
 {
 	Task<List<T>> GetAllByKey<T, TFieldValue>(string filterKey, TFieldValue filterKeyValue);
 	Task<T> GetFirstByKey<T, TFieldValue>(string filterKey, TFieldValue filterKeyValue);
-	Task Insert<T>(T type);
-	Task Upsert<T>(ObjectId filterKeyValue, T type) where T : IHasIdProp;
+	Task Insert<T>(T type) where T : IHasIdProp; 
+	Task Upsert<T>(T type) where T : IHasIdProp;
     Task<List<T>> GetAll<T>();
-    Task Update_IncrementField<T>(ObjectId filterKeyValue, string fieldName, int incrementValue, T type) where T : IHasIdProp;
-    void CreateUniqueAreaForMapIfNotExists<T>();
+    Task Update_IncrementField<T>(string fieldName, int incrementValue, T type) where T : IHasIdProp;
+    void SetUniqueKey<T>(string collectionName, IndexKeysDefinition<T> keysDefinition);
 }
 
 public class MongoDBService : IMongoDBService
@@ -22,17 +22,17 @@ public class MongoDBService : IMongoDBService
 
     public MongoDBService(IMongoClient mongoClient)
     {
-        mongoDatabase = mongoClient.GetDatabase("indoeNaviDB");
+        mongoDatabase = mongoClient.GetDatabase("indoeNaviDB"); 
     }
 
     private IMongoCollection<T> GetCollection<T>(ReadPreference readPreference = null)
     {
         return mongoDatabase
           .WithReadPreference(readPreference ?? ReadPreference.Primary)
-          .GetCollection<T>(Get<T>());
+          .GetCollection<T>(GetCollectionName<T>());
     }
 
-    private static string Get<T>()
+    private static string GetCollectionName<T>()
     {
         return (typeof(T).GetCustomAttributes(typeof(MongoCollectionAttribute), true).FirstOrDefault() as MongoCollectionAttribute)?.Collection;
     }
@@ -41,34 +41,36 @@ public class MongoDBService : IMongoDBService
     /// Create a unique index for maps collection.
     /// The index is on Area ascending.
     /// </summary>
-    public void CreateUniqueAreaForMapIfNotExists<T>()
+
+    public void SetUniqueKey<T>(string collectionName, IndexKeysDefinition<T> keysDefinition)
     {
-        var collectionExists = mongoDatabase.ListCollectionNames().ToList().Contains("maps");
+        var collectionExists = mongoDatabase.ListCollectionNames().ToList().Contains(collectionName);
         if (!collectionExists)
         {
             var collection = GetCollection<T>();
             var options = new CreateIndexOptions { Unique = true };
-            collection.Indexes.CreateOne("{ Area : 1 }", options);
+            collection.Indexes.CreateOne(keysDefinition, options);
         }
     }
 
-    public Task Insert<T>(T type)
+    public Task Insert<T>(T type) where T : IHasIdProp
     {
+        if (type.Id == Guid.Empty)
+        {
+            type.Id = Guid.NewGuid();
+        }
         var collection = GetCollection<T>();
         return collection.InsertOneAsync(type);
     }
-    public Task Upsert<T>(ObjectId filterKeyValue, T type) where T : IHasIdProp
+    public Task Upsert<T>(T type) where T : IHasIdProp
     {
-        // Check if its a upsert or a update 
-        if (filterKeyValue == ObjectId.Empty)
+        if (type.Id == Guid.Empty)
         {
-            // If its a upsert then genereate new id to Map object
-            filterKeyValue = ObjectId.GenerateNewId();
-            type.Id = filterKeyValue;
+            type.Id = Guid.NewGuid();
         }
         var collection = GetCollection<T>();
-        var filter = Builders<T>.Filter.Eq("_id", filterKeyValue);
-        return collection.ReplaceOneAsync(filter, type, new ReplaceOptions { IsUpsert = true });
+        var filter = Builders<T>.Filter.Eq("_id", type.Id);
+        return collection.ReplaceOneAsync(filter, type, new ReplaceOptions { IsUpsert = true});
     }
 
     public async Task<List<T>> GetAllByKey<T, TFieldValue>(string filterKey, TFieldValue filterKeyValue)
@@ -87,18 +89,10 @@ public class MongoDBService : IMongoDBService
         return results.FirstOrDefault();
     }
 
-    public Task Update_IncrementField<T>(ObjectId filterKeyValue, string fieldName, int incrementValue, T type) where T : IHasIdProp
+    public Task Update_IncrementField<T>(string fieldName, int incrementValue, T type) where T : IHasIdProp
     {
-        // Check if its a upsert or a update 
-        if (filterKeyValue == ObjectId.Empty)
-        {
-            // If its a upsert then genereate new id to Map object
-            filterKeyValue = ObjectId.GenerateNewId();
-            type.Id = filterKeyValue;
-        }
-
         var collection = GetCollection<T>();
-        var filter = Builders<T>.Filter.Eq("_id", filterKeyValue);
+        var filter = Builders<T>.Filter.Eq("_id", type.Id);
         var updateDef = Builders<T>.Update.Inc(fieldName, incrementValue);
         return collection.UpdateOneAsync(filter, updateDef);
     }

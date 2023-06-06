@@ -36,13 +36,13 @@ public class StatisticService : IStatisticService
         // If not exist then create one
         if (pathsession == null)
         {
-            pathsession = new PathSession { Id= ObjectId.Empty, Date = DateTimeOffset.Now.Date, Count = 1, Area = area };
+            pathsession = new PathSession {Date = DateTimeOffset.Now.Date, Count = 1, Area = area };
             await mongoDBService.Insert(pathsession);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<PathSession>(pathsession.Id, "Count", 1, pathsession);
+        await mongoDBService.Update_IncrementField<PathSession>("Count", 1, pathsession);
     }
 
     public async Task IncrementActiveUsersToday(string area)
@@ -53,13 +53,13 @@ public class StatisticService : IStatisticService
         // If not exist then create one
         if (activeUser == null)
         {
-            activeUser = new ActiveUser { Id = ObjectId.Empty, Date = DateTimeOffset.Now.Date, Count = 1, Area = area };
+            activeUser = new ActiveUser { Date = DateTimeOffset.Now.Date, Count = 1, Area = area };
             await mongoDBService.Insert(activeUser);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<ActiveUser>(activeUser.Id, "Count", 1, activeUser);
+        await mongoDBService.Update_IncrementField<ActiveUser>("Count", 1, activeUser);
     }
 
     public async Task IncrementDestinationVisits(string destination, string area)
@@ -70,13 +70,13 @@ public class StatisticService : IStatisticService
         // If not exist then create one
         if (destinationVisit == null)
         {
-            destinationVisit = new DestinationVisit { Id = ObjectId.Empty, Destination = destination, Count = 1, Area = area };
+            destinationVisit = new DestinationVisit { Destination = destination, Count = 1, Area = area };
             await mongoDBService.Insert(destinationVisit);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<DestinationVisit>(destinationVisit.Id, "Count", 1, destinationVisit);
+        await mongoDBService.Update_IncrementField<DestinationVisit>( "Count", 1, destinationVisit);
     }
 
     public async Task IncrementUsedSensors(string sensorName, string area)
@@ -87,16 +87,16 @@ public class StatisticService : IStatisticService
         // If not exist then create one
         if (usedSensor == null)
         {
-            usedSensor = new UsedSensor { Id = ObjectId.Empty, SensorName = sensorName, Count = 1, Area = area };
+            usedSensor = new UsedSensor { SensorName = sensorName, Count = 1, Area = area };
             await mongoDBService.Insert(usedSensor);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<UsedSensor>(usedSensor.Id, "Count", 1, usedSensor);
+        await mongoDBService.Update_IncrementField<UsedSensor>( "Count", 1, usedSensor);
     }
 
-    /// <summary>
+        /// <summary>
     /// Check if area exits in map
     /// </summary>
     /// <param name="area"></param>
@@ -104,5 +104,5 @@ public class StatisticService : IStatisticService
     public async Task<bool> IsAreaExists(string area)
     {
         return (await mongoDBService.GetAllByKey<Map, string>("Area", area)).Count > 0;
-    }
+        }
 }

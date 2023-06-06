@@ -37,13 +37,13 @@ public class StatisticService : IStatisticService
         // If not exist then create one
         if (pathsession == null)
         {
-            pathsession = new PathSession { Id= ObjectId.Empty, Date = DateTimeOffset.Now.Date, Count = 1 };
+            pathsession = new PathSession { Date = DateTimeOffset.Now.Date, Count = 1 };
             await mongoDBService.Insert(pathsession, collectionName);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<PathSession>(collectionName, pathsession.Id, "Count", 1, pathsession);
+        await mongoDBService.Update_IncrementField<PathSession>(collectionName, "Count", 1, pathsession);
     }
 
     public async Task<List<ActiveUser>> GetActiveUsers()
@@ -60,13 +60,13 @@ public class StatisticService : IStatisticService
         // If not exist then create one
         if (activeUser == null)
         {
-            activeUser = new ActiveUser { Id = ObjectId.Empty, Date = DateTimeOffset.Now.Date, Count = 1 };
+            activeUser = new ActiveUser { Date = DateTimeOffset.Now.Date, Count = 1 };
             await mongoDBService.Insert(activeUser, collectionName);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<ActiveUser>(collectionName, activeUser.Id, "Count", 1, activeUser);
+        await mongoDBService.Update_IncrementField<ActiveUser>(collectionName, "Count", 1, activeUser);
     }
 
     public async Task<List<DestinationVisit>> GetDestinationVisits()
@@ -83,13 +83,13 @@ public class StatisticService : IStatisticService
         // If not exist then create one
         if (destinationVisit == null)
         {
-            destinationVisit = new DestinationVisit { Id = ObjectId.Empty, Destination = destination, Count = 1 };
+            destinationVisit = new DestinationVisit { Destination = destination, Count = 1 };
             await mongoDBService.Insert(destinationVisit, collectionName);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<DestinationVisit>(collectionName, destinationVisit.Id, "Count", 1, destinationVisit);
+        await mongoDBService.Update_IncrementField<DestinationVisit>(collectionName, "Count", 1, destinationVisit);
     }
 
     public async Task<List<UsedSensor>> GetUsedSensors()
@@ -106,12 +106,12 @@ public class StatisticService : IStatisticService
         // If not exist then create one
         if (usedSensor == null)
         {
-            usedSensor = new UsedSensor { Id = ObjectId.Empty, SensorName = sensorName, Count = 1 };
+            usedSensor = new UsedSensor { SensorName = sensorName, Count = 1 };
             await mongoDBService.Insert(usedSensor, collectionName);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<UsedSensor>(collectionName, usedSensor.Id, "Count", 1, usedSensor);
+        await mongoDBService.Update_IncrementField<UsedSensor>(collectionName, "Count", 1, usedSensor);
     }
 }

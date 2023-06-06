@@ -28,7 +28,10 @@ public class StatisticController : ControllerBase
 	[HttpPost("pathsessions")]
 	public async Task<IActionResult> IncrementPathSession(string area)
 	{
-        await statisticService.IncrementPathSessionToday();
+        if (!(await statisticService.IsAreaExists(area)))
+        {
+            return NotFound($"The area does not exists");
+        }
         await statisticService.IncrementPathSessionToday(area);
 		return Ok($"Today's path session counter incremented with 1");
 	}
@@ -46,7 +49,10 @@ public class StatisticController : ControllerBase
 	[HttpPost("activeusers")]
 	public async Task<IActionResult> IncrementActiveUsers(string area)
 	{
-        await statisticService.IncrementActiveUsersToday();
+        if (!(await statisticService.IsAreaExists(area)))
+        {
+            return NotFound($"The area does not exists");
+        }
         await statisticService.IncrementActiveUsersToday(area);
         return Ok($"Today's active user counter incremented with 1");
 	}
@@ -64,7 +70,10 @@ public class StatisticController : ControllerBase
 	[HttpPost("destinationvisits")]
 	public async Task<IActionResult> IncrementDestinationVisit(string destination, string area)
 	{
-        await statisticService.IncrementDestinationVisits(destination);
+        if (!(await statisticService.IsAreaExists(area)))
+        {
+            return NotFound($"The area does not exists");
+        }
         await statisticService.IncrementDestinationVisits(destination, area);
         return Ok($"Destination visit {destination} incremented with 1");
 	}
@@ -82,7 +91,10 @@ public class StatisticController : ControllerBase
     [HttpPost("usedsensor")]
     public async Task<IActionResult> IncrementUsedSensor(string sensorName, string area)
     {
-        await statisticService.IncrementUsedSensors(sensorName);
+        if (!(await statisticService.IsAreaExists(area)))
+        {
+            return NotFound($"The area does not exists");
+        }
         await statisticService.IncrementUsedSensors(sensorName, area);
         return Ok($"Sensor {sensorName} incremented used with 1");
     }

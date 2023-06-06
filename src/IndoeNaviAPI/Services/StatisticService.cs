@@ -1,4 +1,5 @@
-﻿using IndoeNaviAPI.Models.Statistic;
+﻿using IndoeNaviAPI.Models;
+using IndoeNaviAPI.Models.Statistic;
 using MongoDB.Bson;
 
 namespace IndoeNaviAPI.Services;
@@ -93,5 +94,15 @@ public class StatisticService : IStatisticService
 
         // Increment the counter field
         await mongoDBService.Update_IncrementField<UsedSensor>(usedSensor.Id, "Count", 1, usedSensor);
+    }
+
+    /// <summary>
+    /// Check if area exits in map
+    /// </summary>
+    /// <param name="area"></param>
+    /// <returns></returns>
+    public async Task<bool> IsAreaExists(string area)
+    {
+        return (await mongoDBService.GetAllByKey<Map, string>("Area", area)).Count > 0;
     }
 }

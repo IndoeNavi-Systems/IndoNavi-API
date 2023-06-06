@@ -12,7 +12,7 @@ public interface IMongoDBService
 	Task Upsert<T>(string collectionName, ObjectId filterKeyValue, T type) where T : IHasIdProp;
     Task<List<T>> GetAll<T>(string collectionName);
     Task Update_IncrementField<T>(string collectionName, ObjectId filterKeyValue, string fieldName, int incrementValue, T type) where T : IHasIdProp;
-    void CreateUniqueAreaForMapIfNotExists<T>();
+    void SetUniqueKey<T>(string collectionName, IndexKeysDefinition<T> keysDefinition);
 }
 
 public class MongoDBService : IMongoDBService
@@ -28,14 +28,15 @@ public class MongoDBService : IMongoDBService
     /// Create a unique index for maps collection.
     /// The index is on Area ascending.
     /// </summary>
-    public void CreateUniqueAreaForMapIfNotExists<T>()
+
+    public void SetUniqueKey<T>(string collectionName, IndexKeysDefinition<T> keysDefinition)
     {
-        var collectionExists = mongoDatabase.ListCollectionNames().ToList().Contains("maps");
+        var collectionExists = mongoDatabase.ListCollectionNames().ToList().Contains(collectionName);
         if (!collectionExists)
         {
-            var collection = mongoDatabase.GetCollection<T>("maps");
+            var collection = mongoDatabase.GetCollection<T>(collectionName);
             var options = new CreateIndexOptions { Unique = true };
-            collection.Indexes.CreateOne("{ Area : 1 }", options);
+            collection.Indexes.CreateOne(keysDefinition, options);
         }
     }
 

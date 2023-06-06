@@ -28,13 +28,21 @@ public class MapController : ControllerBase
 	}
 
 	[HttpPut]
-	public IActionResult UpdateMap(Map map)
+	public async Task<IActionResult> UpdateMap(Map map)
 	{
 		if (!Utility.IsBase64String(map.ImageData))
 		{
 			return BadRequest("Image is not encoded in base64");
 		}
-		mapService.UpdateMap(map);
+		try
+		{
+			await mapService.UpdateMap(map);
+		}
+		catch (Exception ex) when (ex.Message.Contains("duplicate"))
+		{
+
+			return Conflict("Duplicate key is not allowed ");
+		}
 		return Ok();
 	}
 }

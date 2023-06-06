@@ -1,4 +1,5 @@
 ﻿using IndoeNaviAPI.Models;
+using MongoDB.Driver;
 
 namespace IndoeNaviAPI.Services;
 
@@ -17,15 +18,13 @@ public class MapService : IMapService
 		this.mongoDBService = mongoDBService;
 	}
 
-	public async Task UpdateMap(Map map)
+	public Task UpdateMap(Map map)
 	{
-		Map mapFromDb = await mongoDBService.GetFirstByKey<Map, string>("maps", "Area", map.Area);
-		map.Id = mapFromDb.Id;
-		await mongoDBService.Upsert<Map>( "maps", mapFromDb.Id, map);
+ 		return mongoDBService.Upsert<Map>( "maps", map);
 	}
 
 	public async Task<Map?> GetMap(string area)
 	{
-		return (await mongoDBService.GetAllByKey<Map, string>("maps", "Area", area)).SingleOrDefault();
+        return (await mongoDBService.GetAllByKey<Map, string>("maps", "Area", area)).SingleOrDefault();
 	}
 }

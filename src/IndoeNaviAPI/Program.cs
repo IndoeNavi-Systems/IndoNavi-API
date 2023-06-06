@@ -1,3 +1,4 @@
+using IndoeNaviAPI.Models;
 using IndoeNaviAPI.Services;
 using MongoDB.Driver;
 
@@ -22,6 +23,8 @@ builder.Services.AddCors(o => o.AddPolicy("AllowAll", builder =>
 
 var app = builder.Build();
 
+
+app.Services.GetService<IMongoDBService>().SetUniqueKey<Map>("maps", "{Area: 1}");
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();

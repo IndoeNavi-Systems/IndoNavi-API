@@ -1,15 +1,13 @@
 ﻿using IndoeNaviAPI.Models;
-using IndoeNaviAPI.Models.Statistic;
 
 namespace IndoeNaviAPI.Services;
 
 public interface IStatisticService
 {
 	Task<List<T>> GetAllByArea<T>(string area);
-    Task IncrementDestinationVisits(string destination, string area);    
-    Task IncrementUsedSensors(string sensorName, string area);
     Task<bool> IsAreaExists(string area);
     Task IncrementStatisticsToday<T>(string area) where T : IAmDateValueStatistic, IHasAreaProp, new();
+    Task IncrementNameListStatistic<T>(string area, string name) where T : IAmNameValueStatistic, IHasAreaProp, new();
 
 }
 
@@ -50,38 +48,28 @@ public class StatisticService : IStatisticService
         await mongoDBService.Update_IncrementField<T>("Count", 1, obj);
     }
 
-    public async Task IncrementDestinationVisits(string destination, string area)
+    /// <summary>
+    /// This method will increment the count prop by one, for the specified name. It used for classes with Id, Area, Name and Count props and an empty constructer <br></br>
+    /// If no documents exists for the name it will create one with Count 1
+    /// </summary>
+    /// <typeparam name="T">  T should implement <see cref="IAmNameValueStatistic"/>, <see cref="IHasAreaProp"/> and new() </typeparam>
+    /// <param name="area"></param>
+    /// <param name="name"></param>
+    /// <returns></returns>
+    public async Task IncrementNameListStatistic<T>(string area, string name) where T : IAmNameValueStatistic, IHasAreaProp, new()
     {
-        // Find Active users for today
-        DestinationVisit destinationVisit = await mongoDBService.GetFirstByKey<DestinationVisit, string>("Destination", destination);
-
+        // Find object for today
+        T obj = await mongoDBService.GetFirstByKey<T, string>("Name", name);
         // If not exist then create one
-        if (destinationVisit == null)
+        if (obj == null)
         {
-            destinationVisit = new DestinationVisit { Destination = destination, Count = 1, Area = area };
-            await mongoDBService.Insert(destinationVisit);
+            obj = new T() { Name = name, Count = 1, Area = area };
+            await mongoDBService.Insert<T>(obj);
             return;
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<DestinationVisit>( "Count", 1, destinationVisit);
-    }
-
-    public async Task IncrementUsedSensors(string sensorName, string area)
-    {
-        // Find Active users for today
-        UsedSensor usedSensor = await mongoDBService.GetFirstByKey<UsedSensor, string>("SensorName", sensorName);
-
-        // If not exist then create one
-        if (usedSensor == null)
-        {
-            usedSensor = new UsedSensor { SensorName = sensorName, Count = 1, Area = area };
-            await mongoDBService.Insert(usedSensor);
-            return;
-        }
-
-        // Increment the counter field
-        await mongoDBService.Update_IncrementField<UsedSensor>( "Count", 1, usedSensor);
+        await mongoDBService.Update_IncrementField<T>("Count", 1, obj);
     }
 
     /// <summary>
@@ -92,5 +80,5 @@ public class StatisticService : IStatisticService
     public async Task<bool> IsAreaExists(string area)
     {
         return (await mongoDBService.GetAllByKey<Map, string>("Area", area)).Count > 0;
-        }
+    }
 }

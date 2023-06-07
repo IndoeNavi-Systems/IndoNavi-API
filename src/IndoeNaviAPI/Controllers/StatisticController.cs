@@ -53,7 +53,7 @@ public class StatisticController : ControllerBase
         {
             return NotFound($"The area does not exists");
         }
-        await statisticService.IncrementStatisticsToday<PathSession>(area);
+        await statisticService.IncrementStatisticsToday<ActiveUser>(area);
         return Ok($"Today's active user counter incremented with 1");
 	}
 
@@ -74,7 +74,7 @@ public class StatisticController : ControllerBase
         {
             return NotFound($"The area does not exists");
         }
-        await statisticService.IncrementDestinationVisits(destination, area);
+        await statisticService.IncrementNameListStatistic<DestinationVisit>(destination, area);
         return Ok($"Destination visit {destination} incremented with 1");
 	}
 
@@ -95,7 +95,7 @@ public class StatisticController : ControllerBase
         {
             return NotFound($"The area does not exists");
         }
-        await statisticService.IncrementUsedSensors(sensorName, area);
+        await statisticService.IncrementNameListStatistic<UsedSensor>(sensorName, area);
         return Ok($"Sensor {sensorName} incremented used with 1");
     }
 }

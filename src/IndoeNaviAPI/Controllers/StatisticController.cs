@@ -32,7 +32,7 @@ public class StatisticController : ControllerBase
         {
             return NotFound($"The area does not exists");
         }
-        await statisticService.IncrementPathSessionToday(area);
+        await statisticService.IncrementStatisticsToday<PathSession>(area);
 		return Ok($"Today's path session counter incremented with 1");
 	}
 
@@ -53,7 +53,7 @@ public class StatisticController : ControllerBase
         {
             return NotFound($"The area does not exists");
         }
-        await statisticService.IncrementActiveUsersToday(area);
+        await statisticService.IncrementStatisticsToday<PathSession>(area);
         return Ok($"Today's active user counter incremented with 1");
 	}
 

@@ -1,15 +1,15 @@
 using IndoeNaviAPI.Utilities;
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace IndoeNaviAPI.Models.Statistic;
 
 [MongoCollection("pathSessions")]
-public class PathSession : IHasIdProp
+public class PathSession : IAmDateValueStatistic, IHasAreaProp
 {
     [BsonId]
     public Guid Id { get; set; }
-    public DateTimeOffset Date { get; set; }
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    public DateTime Date { get; set; }
     public int Count { get; set; }
     public string Area { get; set; }
 }

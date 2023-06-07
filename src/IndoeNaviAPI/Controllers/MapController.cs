@@ -33,12 +33,12 @@ public class MapController : ControllerBase
 		{
 			await mapService.UpsertMap(map);
 		}
-		catch (Exception dup_ex) when (dup_ex.Message.Contains("duplicate"))
+		catch (Exception dupEx) when (dupEx.Message.Contains("duplicate"))
 		{
 
 			return Conflict("Duplicate key is not allowed ");
         }
-		catch (FormatException format_ex) when (format_ex.Message.Contains("Image is not encoded in base64")) 
+		catch (FormatException formatEx) when (formatEx.Message.Contains("Image is not encoded in base64")) 
 		{
 			return BadRequest("Image is not encoded in base64");
 		}

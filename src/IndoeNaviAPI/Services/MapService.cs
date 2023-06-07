@@ -6,7 +6,7 @@ namespace IndoeNaviAPI.Services;
 public interface IMapService
 {
 	Task<Map?> GetMap(string area);
-	Task UpdateMap(Map map);
+	Task UpsertMap(Map map);
 }
 
 public class MapService : IMapService
@@ -18,7 +18,7 @@ public class MapService : IMapService
 		this.mongoDBService = mongoDBService;
 	}
 
-	public Task UpdateMap(Map map)
+	public Task UpsertMap(Map map)
 	{
  		return mongoDBService.Upsert<Map>(map);
 	}

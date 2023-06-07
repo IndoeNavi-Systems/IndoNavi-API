@@ -28,7 +28,7 @@ public class MapController : ControllerBase
 	}
 
 	[HttpPut]
-	public async Task<IActionResult> UpdateMap(Map map)
+	public async Task<IActionResult> UpsertMap(Map map)
 	{
 		if (!Utility.IsBase64String(map.ImageData))
 		{
@@ -36,7 +36,7 @@ public class MapController : ControllerBase
 		}
 		try
 		{
-			await mapService.UpdateMap(map);
+			await mapService.UpsertMap(map);
 		}
 		catch (Exception ex) when (ex.Message.Contains("duplicate"))
 		{

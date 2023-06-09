@@ -1,6 +1,5 @@
 using IndoeNaviAPI.Models;
 using IndoeNaviAPI.Services;
-using IndoeNaviAPI.Utilities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IndoeNaviAPI.Controllers;
@@ -28,21 +27,26 @@ public class MapController : ControllerBase
 	}
 
 	[HttpPut]
-	public async Task<IActionResult> UpdateMap(Map map)
+	public async Task<IActionResult> UpsertMap(Map map)
 	{
-		if (!Utility.IsBase64String(map.ImageData))
-		{
-			return BadRequest("Image is not encoded in base64");
-		}
 		try
 		{
-			await mapService.UpdateMap(map);
+			await mapService.UpsertMap(map);
 		}
-		catch (Exception ex) when (ex.Message.Contains("duplicate"))
+		catch (Exception dupEx) when (dupEx.Message.Contains("duplicate"))
 		{
 
 			return Conflict("Duplicate key is not allowed ");
+        }
+		catch (FormatException formatEx) when (formatEx.Message.Contains("Image is not encoded in base64")) 
+		{
+			return BadRequest("Image is not encoded in base64");
 		}
-		return Ok();
+		// For all other exceptions we only show something bad happend
+        catch (Exception e)
+        {
+            return BadRequest("Something bad happend...");
+        }
+        return Ok();
 	}
 }

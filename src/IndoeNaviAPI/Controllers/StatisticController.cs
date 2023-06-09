@@ -74,7 +74,7 @@ public class StatisticController : ControllerBase
         {
             return NotFound($"The area does not exists");
         }
-        await statisticService.IncrementNameListStatistic<DestinationVisit>(destination, area);
+        await statisticService.IncrementNameListStatistic<DestinationVisit>(area, destination);
         return Ok($"Destination visit {destination} incremented with 1");
 	}
 
@@ -95,7 +95,7 @@ public class StatisticController : ControllerBase
         {
             return NotFound($"The area does not exists");
         }
-        await statisticService.IncrementNameListStatistic<UsedSensor>(sensorName, area);
+        await statisticService.IncrementNameListStatistic<UsedSensor>(area, sensorName);
         return Ok($"Sensor {sensorName} incremented used with 1");
     }
 }

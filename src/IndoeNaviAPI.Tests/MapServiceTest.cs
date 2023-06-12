@@ -60,7 +60,7 @@ namespace IndoeNaviAPI.Tests
 
 		private static List<Map> GetMockMapList()
 		{
-			List<Map> mock = new List<Map>
+			List<Map> maps = new List<Map>
 			{
 				new Map() { Area = "Test1" },
 				new Map() { Area = "Test2" },
@@ -68,7 +68,7 @@ namespace IndoeNaviAPI.Tests
 				new Map() { Area = "Test4" },
 				new Map() { Area = "Test5" }
 			};
-			return mock;
+			return maps;
 		}
 	}
 }

@@ -5,7 +5,7 @@ using System.Net;
 namespace IndoeNaviAPI.Tests.IntegrationTests;
 
 [TestFixture]
-public class MapControllerTest : IntegrationTest
+public class MapControllerTests : IntegrationTests
 {
 	[Test]
 	public async Task UpsertMap_WhenMapDataIsValid_Returns200Ok()

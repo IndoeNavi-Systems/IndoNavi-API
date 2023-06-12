@@ -7,12 +7,6 @@ namespace IndoeNaviAPI.Tests
 	[TestFixture]
 	public class MapServiceTest
 	{
-		[SetUp]
-		public void Setup()
-		{
-
-		}
-
 		[Test]
 		public void UpsertMap_IsAreaNotUnique_TrowDuplicate()
 		{

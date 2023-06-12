@@ -29,11 +29,6 @@ jobs:
         pathtosettingsfile: ./src/IndoeNaviAPI/bin/Release/net6.0/appsettings.json
         name: "mongo_db"
         connectionstring: ${{ secrets.CONNECTING_STRING }}
-    - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: src-dir
-          path: ./src/*
     - name: Test
       run: dotnet test --no-restore --verbosity normal --configuration Release
       

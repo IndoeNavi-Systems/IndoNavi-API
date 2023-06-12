@@ -6,11 +6,11 @@ using System.Text;
 
 namespace IndoeNaviAPI.Tests.IntegrationTests;
 
-public class IntegrationTest
+public class IntegrationTests
 {
 	protected readonly HttpClient httpClient;
 
-	public IntegrationTest()
+	public IntegrationTests()
 	{
 		WebApplicationFactory<Program> webApplicationFactory = new();
 		httpClient = webApplicationFactory.CreateClient();

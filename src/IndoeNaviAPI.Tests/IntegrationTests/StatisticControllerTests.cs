@@ -5,10 +5,10 @@ using System.Net;
 
 namespace IndoeNaviAPI.Tests.IntegrationTests;
 
-public class StatisticControllerTest : IntegrationTest
+public class StatisticControllerTests : IntegrationTests
 {
 	[Test]
-	public async Task Test()
+	public async Task IncrementPathSessions_WhenDataIsValid_Returns200Ok()
 	{
 		// Arrange
 		HttpResponseMessage mapGetResponse = await httpClient.GetAsync("./Map?area=test-map");

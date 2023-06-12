@@ -19,14 +19,14 @@ public class MapService : IMapService
 		this.mongoDBService = mongoDBService;
 	}
 
-	public Task UpsertMap(Map map)
+	public async Task UpsertMap(Map map)
 	{
         if (!Utility.IsBase64String(map.ImageData))
         {
 			throw new FormatException("Image is not encoded in base64");
 		}
 
-        return mongoDBService.Upsert<Map>(map);
+        await mongoDBService.Upsert<Map>(map);
 	}
 
 	public async Task<Map?> GetMap(string area)

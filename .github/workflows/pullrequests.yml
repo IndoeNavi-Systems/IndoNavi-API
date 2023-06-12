@@ -26,7 +26,7 @@ jobs:
     - name: edit connection string
       uses: benday-inc/edit-dbconnstr-in-appsettings@main
       with:
-        pathtosettingsfile: ./home/runner/work/IndoNavi-API/IndoNavi-API/src/IndoeNaviAPI/appsettings.json
+        pathtosettingsfile: ./src/IndoeNaviAPI.Tests/bin/Release/net6.0/appsettings.json
         name: "mongo_db"
         connectionstring: ${{ secrets.CONNECTING_STRING }}
     - name: Test

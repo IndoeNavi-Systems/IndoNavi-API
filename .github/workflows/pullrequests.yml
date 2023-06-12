@@ -23,6 +23,12 @@ jobs:
       run: dotnet restore
     - name: 🏗️ Build
       run: dotnet build --configuration Release --no-restore
+    - name: edit connection string
+      uses: benday-inc/edit-dbconnstr-in-appsettings@main
+      with:
+        pathtosettingsfile: ./src/IndoeNaviAPI/appsettings.json
+        name: "mongo_db"
+        connectionstring: ${{ secrets.CONNECTING_STRING }}
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal --configuration Release
       

@@ -2,7 +2,7 @@ using IndoeNaviAPI.Models;
 using IndoeNaviAPI.Services;
 using Moq;
 
-namespace IndoeNaviAPI.Tests
+namespace IndoeNaviAPI.Tests.UnitTests
 {
 	[TestFixture]
 	public class MapServiceTest
@@ -14,7 +14,7 @@ namespace IndoeNaviAPI.Tests
 			Map input = new Map() { ImageData = "asds" }; // asds is not a valid base64 string
 
 			Mock<IMongoDBService> mockMongoDB = new Mock<IMongoDBService>();
-			mockMongoDB.Setup(m => m.Upsert<Map>(input)).ThrowsAsync(new Exception("duplicate"));
+			mockMongoDB.Setup(m => m.Upsert(input)).ThrowsAsync(new Exception("duplicate"));
 			MapService mapService = new MapService(mockMongoDB.Object);
 
 			// Act and Assert

@@ -34,7 +34,7 @@ jobs:
         with:
           name: src-dir
           path: |
-            src
+            ./src
     - name: Test
       run: dotnet test --no-restore --verbosity normal --configuration Release
       

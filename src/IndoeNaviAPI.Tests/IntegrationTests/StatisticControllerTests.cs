@@ -10,13 +10,8 @@ public class StatisticControllerTests : IntegrationTests
 	[Test]
 	public async Task IncrementPathSessions_WhenDataIsValid_Returns200Ok()
 	{
-		// Arrange
-		HttpResponseMessage mapGetResponse = await httpClient.GetAsync("./Map?area=test-map");
-		Map map = mapGetResponse.StatusCode != HttpStatusCode.NotFound
-			? await GetObjectFromResponse<Map>(mapGetResponse)
-			: MapData.Create();
-
 		// Act
+		await httpClient.PostAsync("./Statistic/pathsessions?area=test-map", new StringContent(string.Empty));
 		HttpResponseMessage beforeIncrementResponse = await httpClient.GetAsync("./Statistic/pathsessions?area=test-map");
 		HttpResponseMessage incrementResponse = await httpClient.PostAsync("./Statistic/pathsessions?area=test-map", new StringContent(string.Empty));
 		HttpResponseMessage afterIncrementResponse = await httpClient.GetAsync("./Statistic/pathsessions?area=test-map");

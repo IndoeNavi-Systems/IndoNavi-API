@@ -62,7 +62,7 @@ public class MongoDBService : IMongoDBService
         var collection = GetCollection<T>();
         return collection.InsertOneAsync(type);
     }
-    public Task Upsert<T>(T type) where T : IHasIdProp
+    public async Task Upsert<T>(T type) where T : IHasIdProp
     {
         if (type.Id == Guid.Empty)
         {
@@ -70,7 +70,7 @@ public class MongoDBService : IMongoDBService
         }
         var collection = GetCollection<T>();
         var filter = Builders<T>.Filter.Eq("_id", type.Id);
-        return collection.ReplaceOneAsync(filter, type, new ReplaceOptions { IsUpsert = true});
+        await collection.ReplaceOneAsync(filter, type, new ReplaceOptions { IsUpsert = true});
     }
 
     public async Task<List<T>> GetAllByKey<T, TFieldValue>(string filterKey, TFieldValue filterKeyValue)
@@ -89,12 +89,12 @@ public class MongoDBService : IMongoDBService
         return results.FirstOrDefault();
     }
 
-    public Task Update_IncrementField<T>(string fieldName, int incrementValue, T type) where T : IHasIdProp
+    public async Task Update_IncrementField<T>(string fieldName, int incrementValue, T type) where T : IHasIdProp
     {
         var collection = GetCollection<T>();
         var filter = Builders<T>.Filter.Eq("_id", type.Id);
         var updateDef = Builders<T>.Update.Inc(fieldName, incrementValue);
-        return collection.UpdateOneAsync(filter, updateDef);
+        await collection.UpdateOneAsync(filter, updateDef);
     }
 
     public async Task<List<T>> GetAll<T>()

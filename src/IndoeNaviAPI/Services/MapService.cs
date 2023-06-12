@@ -31,6 +31,6 @@ public class MapService : IMapService
 
 	public async Task<Map?> GetMap(string area)
 	{
-        return (await mongoDBService.GetAllByKey<Map, string>( "Area", area)).SingleOrDefault();
+        return await mongoDBService.GetFirstByKey<Map, string>("Area", area);
 	}
 }

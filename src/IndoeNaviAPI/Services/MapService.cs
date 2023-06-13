@@ -1,6 +1,5 @@
 ﻿using IndoeNaviAPI.Models;
 using IndoeNaviAPI.Utilities;
-using MongoDB.Driver;
 
 namespace IndoeNaviAPI.Services;
 
@@ -21,7 +20,7 @@ public class MapService : IMapService
 
 	public async Task UpsertMap(Map map)
 	{
-        if (!Utility.IsBase64String(map.ImageData))
+		if (!EncodingChecker.IsBase64String(map.ImageData))
         {
 			throw new FormatException("Image is not encoded in base64");
 		}

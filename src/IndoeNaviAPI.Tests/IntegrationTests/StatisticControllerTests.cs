@@ -5,6 +5,7 @@ using System.Net;
 
 namespace IndoeNaviAPI.Tests.IntegrationTests;
 
+[TestFixture]
 public class StatisticControllerTests : IntegrationTests
 {
 	[Test]

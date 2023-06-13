@@ -13,9 +13,9 @@ namespace IndoeNaviAPI.Tests.UnitTests
 			// Arrange
 			Map input = new Map() { ImageData = "asds" }; // asds is not a valid base64 string
 
-			Mock<IMongoDBService> mockMongoDB = new Mock<IMongoDBService>();
+			Mock<IMongoDBService> mockMongoDB = new();
 			mockMongoDB.Setup(m => m.Upsert(input)).ThrowsAsync(new Exception("duplicate"));
-			MapService mapService = new MapService(mockMongoDB.Object);
+			MapService mapService = new(mockMongoDB.Object);
 
 			// Act and Assert
 			var ex = Assert.ThrowsAsync<Exception>(async () => { await mapService.UpsertMap(input); });
@@ -27,10 +27,10 @@ namespace IndoeNaviAPI.Tests.UnitTests
 		public void UpsertMap_IsImageStringBase64_TrowFormatException()
 		{
 			// Arrange
-			Map input = new Map() { ImageData = "asd" }; // asd is not a valid base64 string
+			Map input = new() { ImageData = "asd" }; // asd is not a valid base64 string
 
-			Mock<IMongoDBService> mockMongoDB = new Mock<IMongoDBService>();
-			MapService mapService = new MapService(mockMongoDB.Object);
+			Mock<IMongoDBService> mockMongoDB = new();
+			MapService mapService = new(mockMongoDB.Object);
 
 			// Act and Assert
 			var ex = Assert.ThrowsAsync<FormatException>(async () => { await mapService.UpsertMap(input); });
@@ -43,12 +43,12 @@ namespace IndoeNaviAPI.Tests.UnitTests
 		public async Task GetMap_IsDestinationExist_ReturnMapObject(Map input)
 		{
 			// Arrange
-			Mock<IMongoDBService> mockMongoDB = new Mock<IMongoDBService>();
+			Mock<IMongoDBService> mockMongoDB = new();
 			mockMongoDB.Setup(m => m.GetFirstByKey<Map, string>("Area", input.Area)).ReturnsAsync(() =>
 			{
 				return input;
 			});
-			MapService mapService = new MapService(mockMongoDB.Object);
+			MapService mapService = new(mockMongoDB.Object);
 
 			// Act
 			var result = await mapService.GetMap(input.Area);

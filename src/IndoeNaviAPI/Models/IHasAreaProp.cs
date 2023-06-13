@@ -1,7 +1,6 @@
-﻿namespace IndoeNaviAPI.Models
+﻿namespace IndoeNaviAPI.Models;
+
+public interface IHasAreaProp
 {
-    public interface IHasAreaProp
-    {
-        string Area { get; set; }
-    }
+    string Area { get; set; }
 }

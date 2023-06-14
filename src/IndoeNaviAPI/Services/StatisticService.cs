@@ -8,7 +8,6 @@ public interface IStatisticService
     Task<bool> IsAreaExists(string area);
     Task IncrementStatisticsToday<T>(string area) where T : IAmDateValueStatistic, IHasAreaProp, new();
     Task IncrementNameListStatistic<T>(string area, string name) where T : IAmNameValueStatistic, IHasAreaProp, new();
-
 }
 
 public class StatisticService : IStatisticService
@@ -30,8 +29,6 @@ public class StatisticService : IStatisticService
     /// If no documents exists for today it will create one with Count 1
     /// </summary>
     /// <typeparam name="T"> T should implement <see cref="IAmDateValueStatistic"/>, <see cref="IHasAreaProp"/> and new() </typeparam>
-    /// <param name="area"></param>
-    /// <returns></returns>
     public async Task IncrementStatisticsToday<T>(string area) where T : IAmDateValueStatistic, IHasAreaProp, new()
     {
         // Find object for today
@@ -45,7 +42,7 @@ public class StatisticService : IStatisticService
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<T>("Count", 1, obj);
+        await mongoDBService.UpdateIncrementField<T>("Count", 1, obj);
     }
 
     /// <summary>
@@ -53,9 +50,6 @@ public class StatisticService : IStatisticService
     /// If no documents exists for the name it will create one with Count 1
     /// </summary>
     /// <typeparam name="T">  T should implement <see cref="IAmNameValueStatistic"/>, <see cref="IHasAreaProp"/> and new() </typeparam>
-    /// <param name="area"></param>
-    /// <param name="name"></param>
-    /// <returns></returns>
     public async Task IncrementNameListStatistic<T>(string area, string name) where T : IAmNameValueStatistic, IHasAreaProp, new()
     {
         // Find object for today
@@ -69,14 +63,12 @@ public class StatisticService : IStatisticService
         }
 
         // Increment the counter field
-        await mongoDBService.Update_IncrementField<T>("Count", 1, obj);
+        await mongoDBService.UpdateIncrementField<T>("Count", 1, obj);
     }
 
     /// <summary>
     /// Check if area exits in map
     /// </summary>
-    /// <param name="area"></param>
-    /// <returns></returns>
     public async Task<bool> IsAreaExists(string area)
     {
         return (await mongoDBService.GetAllByKey<Map, string>("Area", area)).Count > 0;

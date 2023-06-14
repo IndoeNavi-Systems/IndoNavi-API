@@ -43,8 +43,8 @@ public class MapController : ControllerBase
 			return BadRequest("Image is not encoded in base64");
 		}
 		// For all other exceptions we only show something bad happend
-        catch (Exception e)
-        {
+        catch (Exception)
+		{
             return BadRequest("Something bad happend...");
         }
         return Ok();

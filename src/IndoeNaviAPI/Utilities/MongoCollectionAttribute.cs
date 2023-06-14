@@ -1,12 +1,11 @@
-﻿namespace IndoeNaviAPI.Utilities
+﻿namespace IndoeNaviAPI.Utilities;
+
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+public class MongoCollectionAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Class, Inherited = false)]
-    public class MongoCollectionAttribute : Attribute
+    public string Collection { get; }
+    public MongoCollectionAttribute(string collection)
     {
-        public string Collection { get; }
-        public MongoCollectionAttribute(string collection)
-        {
-            Collection = collection;
-        }
+        Collection = collection;
     }
 }

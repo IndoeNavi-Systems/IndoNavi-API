@@ -1,6 +1,6 @@
 ﻿namespace IndoeNaviAPI.Utilities;
 
-public class Utility
+public abstract partial class EncodingChecker
 {
 	public static bool IsBase64String(string base64)
 	{
